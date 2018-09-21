@@ -1,0 +1,15 @@
+#!/bin/bash
+
+zip -r pyth.zip python-systemd-http-server/*
+
+scp pyth.zip jenkins@10.0.10.11:.
+ssh jenkins@10.0.10.11 -t 'unzip pyth.zip; cd python-systemd-http-server; \
+sudo git add --all; sudo git config --global user.name "Abrams88"; \
+sudo git config --global user.email iliasabrams@gmail.com; sudo git commit -m "script_commit"; \
+sudo git push -u origin master; \
+sudo make install; sudo systemctl start python-simple-http-server.service; \
+sudo systemctl status python-simple-http-server.service | grep -i "active" >>log.txt; \
+sudo git add --all; sudo git commit -m "update3"; sudo git push -u origin master'
+
+
+
