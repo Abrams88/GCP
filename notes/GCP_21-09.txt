@@ -1,0 +1,101 @@
+Identity and Access Management (Cloud IAM)
+You can create a custom Cloud IAM role with one or more permissions and then grant that custom role to users
+you grant them roles
+Custom roles are user-defined, and allow you to bundle one or more supported permissions to meet your specific needs
+You create a custom role by combining one or more of the available Cloud IAM permissions
+<service>.<resource>.<verb>
+compute.instances.list
+You cannot grant custom roles from one project or organization on a resource owned by a different project or organization.
+
+To be able to create a custom role you need the following permissions: iam.roles.create
+
+what permissions can be applied to a resource. You can get all permissions that can be applied to a resource, and the resources below that in the hierarchy
+
+Users who are not owners, including organization admins, must be assigned either the 
+Organization Role Administrator role, or the IAM Role Administrator role.
+----------------------------------------------
+						CREATE A ROLE
+gcloud iam roles create cust_role --project abrams-214214 --title "Custom role" --description "My custom role" 
+--permissions iam.roles.get,iam.roles.list --stage ALPHA
+
+Created role [cust_role].
+description: My custom role
+etag: BwV2Xmm9suM=
+includedPermissions:
+- iam.roles.get
+- iam.roles.list
+name: projects/abrams-214214/roles/cust_role
+stage: ALPHA
+title: Custom role
+							UPDATE A ROLE
+gcloud iam roles update cust_role --project abrams-214214 --title "Cust role" --description "My custom role2" 
+--permissions iam.roles.get,iam.roles.list --stage ALPHA
+
+description: My custom role2
+etag: BwV2XncguvQ=
+includedPermissions:
+- iam.roles.get
+- iam.roles.list
+name: projects/abrams-214214/roles/cust_role
+stage: ALPHA
+title: Cust role
+
+------------------
+					DESCRIBE a ROLE
+gcloud iam roles describe --project abrams-214214 cust_role
+
+description: My custom role2
+etag: BwV2XncguvQ=
+includedPermissions:
+- iam.roles.get
+- iam.roles.list
+name: projects/abrams-214214/roles/cust_role
+stage: ALPHA
+title: Cust role
+------------------
+						COPY- a ROLE
+gcloud iam roles copy --dest-project=iliasproject-214108  
+--destination=custom_role --source=cust_role  --source-project=abrams-214214
+
+description: My custom role2
+etag: BwV2XrZ-XeA=
+includedPermissions:
+- iam.roles.get
+- iam.roles.list
+name: projects/iliasproject-214108/roles/custom_role
+stage: ALPHA
+title: Cust role
+-------------------------------------------
+
+					SERVICE ACCOUNTS
+
+This way the service account is the identity of the service, and the service account's permissions control which resources the service can access.
+
+A service account is identified by its email address, which is unique to the account.
+
+Creating a service account is similar to adding a member to your project, but the service account belongs to your applications rather than an individual end user.
+
+
+				CREATE SERVICE ACCOUNT
+gcloud iam service-accounts create custom-service-acc --display-name "Custom-service-account"
+Created service account [custom-service-acc].
+					
+						LIST SERVICE ACCOUNTS
+gcloud iam service-accounts list
+NAME                                    EMAIL
+abrams                                  abrams@abrams-214214.iam.gserviceaccount.com
+App Engine default service account      abrams-214214@appspot.gserviceaccount.com
+Custom-service-account                  custom-service-acc@abrams-214214.iam.gserviceaccount.com
+Compute Engine default service account  7401735946-compute@developer.gserviceaccount.com
+
+gcloud iam service-accounts delete custom-service-acc@abrams-214214.iam.gserviceaccount.com
+
+						SERVICE ACCOUNT KEYS
+
+gcloud iam service-accounts keys create ~/key.json --iam-account custom-service-acc@abrams-214214.iam.gserviceaccount.com
+created key [ae9777e7bf5036b2ead658320878bd2d63b1bbd7] of type [json] as [/home/iliasabrams/key.json] for [custom-service-acc@abrams-214214.iam.gserviceaccount.com]
+
+
+
+
+
